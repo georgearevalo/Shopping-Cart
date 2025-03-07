@@ -25,6 +25,13 @@ public class ProductsService {
    * @param xProduct product
    * @return found products
    */
+  /**
+   * Retrieves a list of products from the Fakestore API and maps them to a ProductResponse.
+   * In case of success, the response contains the list of products and the number of products.
+   * If no products are found or an error occurs during the process, the response contains an empty list and a product count of 0.
+   *
+   * @return ProductResponse containing the list of products and the number of products.
+   */
   public ProductResponse getProductsResponse() {
     ProductResponse response = new ProductResponse();
     
