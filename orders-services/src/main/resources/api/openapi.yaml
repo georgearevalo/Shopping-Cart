@@ -1,0 +1,197 @@
+openapi: 3.0.0
+info:
+  title: API for Orders Service
+  version: 0.0.1
+  description: |
+    API for Orders Service
+
+    ### Key Features
+    - **Orders:** Retrieval of Orders information.
+servers:
+  - url: http://localhost:8082
+    description: Local environment
+paths:
+  /orders-services/orders:
+    post:
+      summary: Save info Order.
+      description: Save info Order.
+      operationId: saveOrder
+      tags:
+        - Orders
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderResponse'
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '400':
+          description: Bad request
+        '404':
+          description: Order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '412':
+          description: Precondition failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+    put:
+      summary: Update info Order.
+      description: Update info Order.
+      operationId: updateOrder
+      tags:
+        - Orders
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderResponse'
+      responses:
+        '204':
+          description: Order updated successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '412':
+          description: Precondition failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+  /orders-services/orders/{OrderId}:
+    get:
+      summary: Get info Order.
+      description: Retrieves info Order.
+      operationId: getOrder
+      tags:
+        - Orders
+      parameters:
+        - $ref: '#/components/parameters/OrderId'
+      responses:
+        '200':
+          description: Order found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '400':
+          description: Bad request
+        '404':
+          description: Order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '412':
+          description: Precondition failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+    delete:
+      summary: Delete info Order by id.
+      description: It delete Order by id.
+      operationId: deleteOrder
+      tags:
+        - Orders
+      parameters:
+        - $ref: '#/components/parameters/OrderId'
+      responses:
+        '204':
+          description: Order delete successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '412':
+          description: Precondition failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+components:
+  parameters:
+    OrderId:
+      name: OrderId
+      in: path
+      description: Order Id
+      required: true
+      schema:
+        type: integer
+        example: 1
+  schemas:
+    ErrorResponseDTO:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        errorCode:
+          type: string
+          example: PRJ0001
+        message:
+          type: string
+          example: Register not found
+        timestamp:
+          type: string
+          format: date-time
+          example: 2024-06-05T12:34:36Z
+    OrderResponse:
+      type: object
+      properties:
+        orderId:
+          type: integer
+          example: 123
+        orderCustomerId:
+          type: integer
+          example: 123
+        orderTotal:
+          type: number
+          example: 123.45
+        orderDateCreated:
+          type: string
+          example: "2025-03-07"

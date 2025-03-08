@@ -1,0 +1,197 @@
+openapi: 3.0.0
+info:
+  title: API for Customers Service
+  version: 0.0.1
+  description: |
+    API for Customers Service
+
+    ### Key Features
+    - **Customers:** Retrieval of Customers information.
+servers:
+  - url: http://localhost:8081
+    description: Local environment
+paths:
+  /customers-services/customers:
+    post:
+      summary: Save info Customer.
+      description: Save info Customer.
+      operationId: saveCustomer
+      tags:
+        - Customers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerResponse'
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+        '400':
+          description: Bad request
+        '404':
+          description: Customer not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '412':
+          description: Precondition failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+    put:
+      summary: Update info Customer.
+      description: Update info Customer.
+      operationId: updateCustomer
+      tags:
+        - Customers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerResponse'
+      responses:
+        '204':
+          description: Customer updated successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Customer not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '412':
+          description: Precondition failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+  /customers-services/customers/{CustomerId}:
+    get:
+      summary: Get info Customer.
+      description: Retrieves info Customer.
+      operationId: getCustomer
+      tags:
+        - Customers
+      parameters:
+        - $ref: '#/components/parameters/CustomerId'
+      responses:
+        '200':
+          description: Customer found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+        '400':
+          description: Bad request
+        '404':
+          description: Customer not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '412':
+          description: Precondition failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+    delete:
+      summary: Delete info Customer by id.
+      description: It delete Customer by id.
+      operationId: deleteCustomer
+      tags:
+        - Customers
+      parameters:
+        - $ref: '#/components/parameters/CustomerId'
+      responses:
+        '204':
+          description: Customer delete successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Customer not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '412':
+          description: Precondition failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+components:
+  parameters:
+    CustomerId:
+      name: CustomerId
+      in: path
+      description: Customer Id
+      required: true
+      schema:
+        type: integer
+        example: 1
+  schemas:
+    ErrorResponseDTO:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        errorCode:
+          type: string
+          example: PRJ0001
+        message:
+          type: string
+          example: Register not found
+        timestamp:
+          type: string
+          format: date-time
+          example: 2024-06-05T12:34:36Z
+    CustomerResponse:
+      type: object
+      properties:
+        customerId:
+          type: integer
+          example: 123
+        customerName:
+          type: string
+          example: "Name customer"
+        customerEmail:
+          type: string
+          example: "email@company.com"
+        customerAddress:
+          type: string
+          example: "Address customer"

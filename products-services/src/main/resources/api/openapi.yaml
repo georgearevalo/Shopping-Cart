@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: API for Products Service
-  version: 1.0.0
+  version: 0.0.1
   description: |
     API for Products Service
 
@@ -12,17 +12,21 @@ servers:
     description: Local environment
 paths:
   /products-services/products:
-    get:
-      summary: Gets info Products.
-      description: Retrieves info Products.
-      operationId: getProducts
+    post:
+      summary: Save info Product.
+      description: Save info Product.
+      operationId: saveProduct
       tags:
         - Products
-      parameters:
-        - $ref: '#/components/parameters/X-Product'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductResponse'
       responses:
         '200':
-          description: A list of products.
+          description: OK.
           content:
             application/json:
               schema:
@@ -31,49 +35,169 @@ paths:
           description: Bad request
         '404':
           description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
         '412':
           description: Precondition failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
         '500':
           description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+    put:
+      summary: Update info Product.
+      description: Update info Product.
+      operationId: updateProduct
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductResponse'
+      responses:
+        '204':
+          description: Product updated successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '412':
+          description: Precondition failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+  /products-services/products/{ProductId}:
+    get:
+      summary: Get info Product.
+      description: Retrieves info Product.
+      operationId: getProduct
+      tags:
+        - Products
+      parameters:
+        - $ref: '#/components/parameters/ProductId'
+      responses:
+        '200':
+          description: Product found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        '400':
+          description: Bad request
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '412':
+          description: Precondition failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+    delete:
+      summary: Delete info Product by id.
+      description: It delete Product by id.
+      operationId: deleteProduct
+      tags:
+        - Products
+      parameters:
+        - $ref: '#/components/parameters/ProductId'
+      responses:
+        '204':
+          description: Product delete successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '412':
+          description: Precondition failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
 components:
   parameters:
-    X-Product:
-      name: x-product
-      in: header
-      description: Code product
+    ProductId:
+      name: ProductId
+      in: path
+      description: Product Id
       required: true
       schema:
-        type: string
-        example: "Name product"
+        type: integer
+        example: 1
   schemas:
-    ProductResponse:
+    ErrorResponseDTO:
       type: object
       properties:
-        numberOfProducts:
+        statusCode:
           type: integer
-          example: 12
-        products:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductsDTO'
-    ProductsDTO:
+          example: 404
+        errorCode:
+          type: string
+          example: PRJ0001
+        message:
+          type: string
+          example: Register not found
+        timestamp:
+          type: string
+          format: date-time
+          example: 2024-06-05T12:34:36Z
+    ProductResponse:
       type: object
       properties:
         productId:
           type: integer
-          example: 1
+          example: 121
         productName:
           type: string
-          example: "Name Product"
+          example: "Product Name"
         productPrice:
           type: number
-          example: 12.34
+          example: 123.10
         productDescription:
           type: string
-          example: "Description Product"
+          example: "Product Description"
         productCategory:
           type: string
-          example: "Category Product"
+          example: "Product Category"
         productImage:
           type: string
-          example: "URL Image Product"
+          example: "Product Image"
