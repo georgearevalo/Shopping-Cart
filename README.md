@@ -42,6 +42,8 @@ Before getting started, ensure you have the following prerequisites installed:
 The application is configured through the `application.properties` file. Here are some important properties:
 
 * `server.port`: Port on which the application runs.
+* `segurity.config.username`: Username for access to the application.
+* `segurity.config.password`: Password for access to the application.
 
 You can modify these properties according to your needs.
 
