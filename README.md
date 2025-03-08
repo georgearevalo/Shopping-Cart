@@ -5,8 +5,8 @@ This project is a Spring Boot application that provides Series of microservices 
 
 Before getting started, ensure you have the following prerequisites installed:
 
-* Java 17 or later
-* Maven 3.6 or later
+* Java 18 or later
+* Maven 3.9 or later
 * Git (optional, for cloning the repository)
 
 ## Installation Steps
