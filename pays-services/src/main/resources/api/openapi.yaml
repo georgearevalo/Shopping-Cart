@@ -1,0 +1,131 @@
+openapi: 3.0.0
+info:
+  title: API for Pays Service
+  version: 0.0.1
+  description: |
+    API for Pays Service
+
+    ### Key Features
+    - **Pays:** Retrieval of Pays information.
+servers:
+  - url: http://localhost:8084
+    description: Local environment
+paths:
+  /pays-services/pays:
+    post:
+      summary: Save info Pay.
+      description: Save info Pay.
+      operationId: savePay
+      tags:
+        - Pays
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayResponse'
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayResponse'
+        '400':
+          description: Bad request
+        '404':
+          description: Pay not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '412':
+          description: Precondition failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+  /pays-services/pays/{PayId}:
+    get:
+      summary: Get info Pay.
+      description: Retrieves info Pay.
+      operationId: getPay
+      tags:
+        - Pays
+      parameters:
+        - $ref: '#/components/parameters/PayId'
+      responses:
+        '200':
+          description: Pay found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayResponse'
+        '400':
+          description: Bad request
+        '404':
+          description: Pay not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '412':
+          description: Precondition failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+components:
+  parameters:
+    PayId:
+      name: PayId
+      in: path
+      description: Pay Id
+      required: true
+      schema:
+        type: integer
+        example: 1
+  schemas:
+    ErrorResponseDTO:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        errorCode:
+          type: string
+          example: PRJ0001
+        message:
+          type: string
+          example: Register not found
+        timestamp:
+          type: string
+          format: date-time
+          example: 2024-06-05T12:34:36Z
+    PayResponse:
+      type: object
+      properties:
+        payId:
+          type: integer
+          example: 123
+        payOrderId:
+          type: integer
+          example: 123
+        payAmount:
+          type: number
+          example: 123.10
+        payDateCreated:
+          type: string
+          example: "2025-03-07"

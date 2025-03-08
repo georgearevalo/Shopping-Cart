@@ -1,0 +1,200 @@
+openapi: 3.0.0
+info:
+  title: API for Details Service
+  version: 0.0.1
+  description: |
+    API for Details Service
+
+    ### Key Features
+    - **Details:** Retrieval of Details information.
+servers:
+  - url: http://localhost:8082
+    description: Local environment
+paths:
+  /details-services/details:
+    post:
+      summary: Save info Detail.
+      description: Save info Detail.
+      operationId: saveDetail
+      tags:
+        - Details
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DetailResponse'
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailResponse'
+        '400':
+          description: Bad request
+        '404':
+          description: Detail not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '412':
+          description: Precondition failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+    put:
+      summary: Update info Detail.
+      description: Update info Detail.
+      operationId: updateDetail
+      tags:
+        - Details
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DetailResponse'
+      responses:
+        '204':
+          description: Detail updated successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Detail not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '412':
+          description: Precondition failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+  /details-services/details/{DetailId}:
+    get:
+      summary: Get info Detail.
+      description: Retrieves info Detail.
+      operationId: getDetail
+      tags:
+        - Details
+      parameters:
+        - $ref: '#/components/parameters/DetailId'
+      responses:
+        '200':
+          description: Detail found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailResponse'
+        '400':
+          description: Bad request
+        '404':
+          description: Detail not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '412':
+          description: Precondition failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+    delete:
+      summary: Delete info Detail by id.
+      description: It delete Detail by id.
+      operationId: deleteDetail
+      tags:
+        - Details
+      parameters:
+        - $ref: '#/components/parameters/DetailId'
+      responses:
+        '204':
+          description: Detail delete successfully
+        '400':
+          description: Bad request
+        '404':
+          description: Detail not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '412':
+          description: Precondition failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseDTO'
+components:
+  parameters:
+    DetailId:
+      name: DetailId
+      in: path
+      description: Detail Id
+      required: true
+      schema:
+        type: integer
+        example: 1
+  schemas:
+    ErrorResponseDTO:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        errorCode:
+          type: string
+          example: PRJ0001
+        message:
+          type: string
+          example: Register not found
+        timestamp:
+          type: string
+          format: date-time
+          example: 2024-06-05T12:34:36Z
+    DetailResponse:
+      type: object
+      properties:
+        detailId:
+          type: integer
+          example: 121
+        detailOrderId:
+          type: integer
+          example: 122
+        detailProductId:
+          type: integer
+          example: 123
+        detailQuantity:
+          type: integer
+          example: 124
+        detailPrice:
+          type: number
+          example: 100.10

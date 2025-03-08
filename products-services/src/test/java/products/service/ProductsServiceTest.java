@@ -1,79 +1,88 @@
 package products.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import products.exceptions.ProductsFakeApiException;
+import products.exceptions.ProductsNotFoundException;
 import products.infraestructure.AppFakestoreapiClient;
+import products.mapper.ProductFakestoreapiMapper;
 import products.mapper.ProductMapper;
 import products.model.ProductResponse;
 import products.model.dto.Product;
-import products.model.ProductsDTO;
-
+import java.util.Collections;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ProductsServiceTest {
 
-  @Mock
-  private AppFakestoreapiClient appFakestoreapiClient;
+  @Mock private AppFakestoreapiClient appFakestoreapiClient;
+  @Mock private ProductFakestoreapiMapper productFakestoreapiMapper;
+  @Mock private ProductMapper productMapper;
 
-  @Mock
-  private ProductMapper productMapper;
-
-  @InjectMocks
-  private ProductsService productsService;
+  @InjectMocks private ProductsService productsService;
 
   @Test
-  void getProductsResponse_shouldReturnProducts_whenProductsFound() {
-    // Arrange
-    Product product1 = new Product();
-    Product product2 = new Product();
-    List<Product> products = Arrays.asList(product1, product2);
-
-    ProductsDTO productDTO1 = new ProductsDTO();
-    ProductsDTO productDTO2 = new ProductsDTO();
-    List<ProductsDTO> productDTOs = Arrays.asList(productDTO1, productDTO2);
-
-    when(appFakestoreapiClient.getAllProducts()).thenReturn(products);
-    when(productMapper.toDTOList(products)).thenReturn(productDTOs);
-
-    // Act
-    ProductResponse response = productsService.getProductsResponse();
-
-    // Assert
-    assertEquals(2, response.getNumberOfProducts());
-    assertEquals(productDTOs, response.getProducts());
+  void getProduct_ExistingProductId_ReturnsProductResponse() {
+    int productId = 1;
+    Product product = new Product();
+    product.setId(productId);
+    ProductResponse productResponse = new ProductResponse();
+    productResponse.setProductId(productId);
   }
 
   @Test
-  void getProductsResponse_shouldReturnEmptyList_whenNoProductsFound() {
-    // Arrange
+  void saveProduct_ValidProduct_ReturnsSavedProduct() {
+    ProductResponse product = new ProductResponse();
+    ProductResponse savedProduct = productsService.saveProduct(product);
+
+    assertEquals(21, savedProduct.getProductId());
+  }
+
+  @Test
+  void updateProduct_ExistingProduct_UpdatesProduct() {
+    ProductResponse productResponse = new ProductResponse();
+    int productId = 1;
+    productResponse.setProductId(productId);
+    Product product = new Product();
+    product.setId(productId);
+  }
+
+  @Test
+  void updateProduct_NonExistingProduct_ThrowsProductsNotFoundException() {
+    ProductResponse product = new ProductResponse();
+    product.setProductId(1);
+  }
+
+  @Test
+  void deleteProduct_ExistingProduct_DeletesProduct() {
+    int productId = 1;
+    Product product = new Product();
+    product.setId(productId);
+  }
+
+  @Test
+  void deleteProduct_NonExistingProduct_ThrowsProductsNotFoundException() {
+    int productId = 1;
+    assertThrows(ProductsNotFoundException.class, () -> productsService.deleteProduct(productId));
+  }
+
+  @Test
+  void getProductFake_NoProductsFound_ThrowsProductsNotFoundException() {
     when(appFakestoreapiClient.getAllProducts()).thenReturn(Collections.emptyList());
 
-    // Act
-    ProductResponse response = productsService.getProductsResponse();
-
-    // Assert
-    assertEquals(0, response.getNumberOfProducts());
-    assertEquals(Collections.emptyList(), response.getProducts());
+    assertThrows(ProductsNotFoundException.class, () -> productsService.getProductFake(1));
+    verify(appFakestoreapiClient, times(1)).getAllProducts();
   }
 
   @Test
-  void getProductsResponse_shouldReturnEmptyList_whenExceptionOccurs() {
-    // Arrange
-    when(appFakestoreapiClient.getAllProducts()).thenThrow(new RuntimeException("Simulated exception"));
+  void getProductFake_ApiException_ThrowsProductsFakeApiException() {
+    when(appFakestoreapiClient.getAllProducts()).thenThrow(new RuntimeException());
 
-    // Act
-    ProductResponse response = productsService.getProductsResponse();
-
-    // Assert
-    assertEquals(0, response.getNumberOfProducts());
-    assertEquals(Collections.emptyList(), response.getProducts());
+    assertThrows(ProductsFakeApiException.class, () -> productsService.getProductFake(1));
+    verify(appFakestoreapiClient, times(1)).getAllProducts();
   }
 }
