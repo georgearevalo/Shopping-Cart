@@ -16,6 +16,28 @@ import products.model.ProductResponse;
 import products.model.dto.Product;
 import products.model.dto.ProductFakestoreapi;
 
+/**
+ * The {@code ProductsService} class provides methods for managing products, including retrieving,
+ * saving, updating, and deleting product information. It interacts with an external Fakestore API
+ * to fetch product details and uses mappers to convert between different product representations.
+ *
+ * <p>This service handles product-related operations, such as:
+ *
+ * <ul>
+ *   <li>Retrieving a product by ID.
+ *   <li>Saving a new product.
+ *   <li>Updating an existing product's information.
+ *   <li>Deleting a product by ID.
+ *   <li>Fetching product data from the Fakestore API.
+ * </ul>
+ *
+ * <p>It uses {@link AppFakestoreapiClient} to communicate with the Fakestore API,
+ * {@link ProductFakestoreapiMapper} to map Fakestore API products to DTOs, and {@link ProductMapper}
+ * to map between product DTOs and response objects.
+ *
+ * <p>Exceptions such as {@link ProductsNotFoundException} and {@link ProductsFakeApiException} are
+ * thrown to indicate errors during product retrieval or interaction with the Fakestore API.
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
