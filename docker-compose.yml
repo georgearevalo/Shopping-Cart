@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  product-services:
+    build: ./products-services
+    ports:
+      - "8080:8080"
+  customers-services:
+    build: ./customers-services
+    ports:
+      - "8081:8081"
+  orders-services:
+    build: ./orders-services
+    ports:
+      - "8082:8082"
+  details-services:
+    build: ./details-services
+    ports:
+      - "8083:8083"
+  pays-services:
+    build: ./pays-services
+    ports:
+      - "8084:8084"
